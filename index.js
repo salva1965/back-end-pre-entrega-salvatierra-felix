@@ -1,9 +1,22 @@
-// ^^----- tomar argumentos ----------------
-let [,,comando,recurso] = process.argv;
+// ------- tomar argumentos ----------------
+let [,,comando,recurso,...parmetros] = process.argv;
 // ------ validar may,minsc --------------
 
 comando = comando.toUpperCase();
 recurso = recurso.toLowerCase();
+//-------- crear un nuevo producto -----------------------------------
+if (comando == "POST" && recurso == "products") {
+    const [title,price,category]= parmetros;
+    const product = { title,price,category};
+
+    fetch('https://fakestoreapi.com/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(product),
+    })
+        .then(response => response.json())
+        .then(data => console.log(data));
+}
 // ------ traer productos de Fakestoreapi ------------------
 if (comando == "GET" && recurso == "products") {
     const respuesta = await fetch('https://fakestoreapi.com/products');
