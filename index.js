@@ -1,20 +1,20 @@
 // // ------- tomar argumentos ----------------
- let [,,comando,recurso,...parametros] = process.argv;
+ let [,,metodo,recurso,...parametros] = process.argv;
  // ------ validar may,minsc --------------
 
-comando = comando.toUpperCase();
+metodo = metodo.toUpperCase();
 recurso = recurso.toLowerCase();
 
 
  // ------ traer productos de Fakestoreapi ------------------
-if (comando == "GET" && recurso == "products") {
+if (metodo == "GET" && recurso == "products") {
     const respuesta = await fetch('https://fakestoreapi.com/products');
     const datos = await respuesta.json();
     console.log(datos);
 }
 //-------- mostrar un producto por id ------------------------------------
 
-if (comando == "GET" && recurso.startsWith("products/")) {
+if (metodo == "GET" && recurso.startsWith("products/")) {
     let id = recurso.split("/")[1];
     id = parseInt(id);
     if (isNaN(id) || id < 1) {
@@ -23,13 +23,14 @@ if (comando == "GET" && recurso.startsWith("products/")) {
         
         fetch('https://fakestoreapi.com/products/' + id)
             .then(response => response.json())
-            .then(data => console.log(data));
+            .then(data => console.log(data))
+            .catch((error) => console.error(error));
     }
    
 }
 //-------- Agregar un nuevo producto -----------------------------------
 
-if (comando == "POST" && recurso == "products") {
+if (metodo == "POST" && recurso == "products") {
     
     const [title, price, category] = parametros;
     const product = { title, price, category };
@@ -40,11 +41,12 @@ if (comando == "POST" && recurso == "products") {
         body: JSON.stringify(product)
     })
         .then(response => response.json())
-        .then(data => console.log(data));
+        .then(data => console.log(data))
+        .catch((error) => console.error(error));
 }
 //----------- Eliminar un producto ---------------------------------------
 
-if (comando == "DELETE" && recurso.startsWith("products/")) {
+if (metodo == "DELETE" && recurso.startsWith("products/")) {
     let id = parseInt(recurso.split("/")[1]);
     
     if (isNaN(id) || id < 1) {
@@ -55,7 +57,8 @@ if (comando == "DELETE" && recurso.startsWith("products/")) {
             method: 'DELETE'
         })
             .then(response => response.json())
-            .then(data => console.log(data));
+            .then(data => console.log(data))
+            .catch((error) => console.error(error));
     }
 
 }
